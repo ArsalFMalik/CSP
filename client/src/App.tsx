@@ -1,11 +1,15 @@
-import './App.css'
-import { Button } from "@/components/ui/button"
+import { MultiSelect } from "@/components/ui/MultiSelect"
+import { ThemeProvider } from "@/components/theme-provider"
+import { ModeToggle } from "@/components/mode-toggle"
 
 function App() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh">
-      <Button>Click</Button>
-    </div>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <ModeToggle />
+        <MultiSelect />
+      </div>
+    </ThemeProvider>
   )
 }
 
