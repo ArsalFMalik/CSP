@@ -10,19 +10,30 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
 
-const items = [
-  { value: "react", label: "React" },
-  { value: "vue", label: "Vue" },
-  { value: "svelte", label: "Svelte" },
-  { value: "angular", label: "Angular" },
-  { value: "nextjs", label: "Next.js" },
-  { value: "nuxt", label: "Nuxt" },
-  { value: "solid", label: "SolidJS" },
-  { value: "ember", label: "Ember.js" },
-  // Add more as needed
-]
+type Items = {
+  value: string
+  label: string
+}
 
-export function MultiSelect() {
+type Props = {
+  items: Items[],
+  selectedIngredients?: string[],
+  setSelectedIngredients?: (ingredients: string[]) => void
+}
+
+// const items = [
+//   { value: "react", label: "React" },
+//   { value: "vue", label: "Vue" },
+//   { value: "svelte", label: "Svelte" },
+//   { value: "angular", label: "Angular" },
+//   { value: "nextjs", label: "Next.js" },
+//   { value: "nuxt", label: "Nuxt" },
+//   { value: "solid", label: "SolidJS" },
+//   { value: "ember", label: "Ember.js" },
+//   // Add more as needed
+// ]
+
+export function MultiSelect( { items, selectedIngredients, setSelectedIngredients } : Props) {
   const [selected, setSelected] = useState<string[]>([])
 
   const toggleItem = (value: string) => {
