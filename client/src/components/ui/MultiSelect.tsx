@@ -1,4 +1,4 @@
-import { useState } from "react"
+// import { useState } from "react"
 import {
   Command,
   CommandInput,
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/command"
 import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
+import { Button } from "./button"
 
 type Items = {
   value: string
@@ -17,8 +18,8 @@ type Items = {
 
 type Props = {
   items: Items[],
-  selectedIngredients?: string[],
-  setSelectedIngredients?: (ingredients: string[]) => void
+  selected: string[],
+  setSelected: (ingredients: string[]) => void
 }
 
 // const items = [
@@ -33,25 +34,38 @@ type Props = {
 //   // Add more as needed
 // ]
 
-export function MultiSelect( { items, selectedIngredients, setSelectedIngredients } : Props) {
-  const [selected, setSelected] = useState<string[]>([])
+export function MultiSelect( { items, selected, setSelected } : Props) {
+  // const [selected, setSelected] = useState<string[]>([])
+
+  // const toggleItem = (value: string) => {
+  //   setSelected((prev) =>
+  //     prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+  //   )
+  // }
+
+  // const removeItem = (value: string) => {
+  //   setSelected((prev) => prev.filter((v) => v !== value))
+  // }
 
   const toggleItem = (value: string) => {
-    setSelected((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-    )
-  }
-
+    const newSelected = selected.includes(value)
+      ? selected.filter((v) => v !== value)
+      : [...selected, value];
+  
+    setSelected(newSelected);
+  };
+  
   const removeItem = (value: string) => {
-    setSelected((prev) => prev.filter((v) => v !== value))
-  }
+    const newSelected = selected.filter((v) => v !== value);
+    setSelected(newSelected);
+  };
 
   return (
     <div className="w-full max-w-xl space-y-4">
       {/* Selected Badges */}
       <div className="flex flex-wrap gap-2">
             {selected.length === 0 ? (
-                <span className="text-muted-foreground">No items selected</span>
+                <span className="text-muted-foreground">No ingredients selected</span>
             ) : (
                 selected.map((value) => {
                     const item = items.find((i) => i.value === value)
@@ -77,30 +91,34 @@ export function MultiSelect( { items, selectedIngredients, setSelectedIngredient
                 })
             )}
         </div>
-
+      {selected.length > 0 && (
+    <Button variant="ghost" size="sm" onClick={() => setSelected([])}>
+    Clear All
+  </Button>
+  )}
 
       {/* Searchable Command Grid */}
       <Command className="border rounded-md">
-        <CommandInput placeholder="Search items..." />
+        <CommandInput placeholder="Search ingredients..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-2">
-              {items.map((item) => (
-                <CommandItem
-                  key={item.value}
-                  onSelect={() => toggleItem(item.value)}
-                  className="cursor-pointer flex items-center"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(item.value)}
-                    readOnly
-                    className="mr-2"
-                  />
-                  {item.label}
-                </CommandItem>
-              ))}
+            {items.map((item) => {
+  const isSelected = selected.includes(item.value)
+  return (
+    <CommandItem
+      key={item.value}
+      onSelect={() => toggleItem(item.value)}
+      className={`cursor-pointer flex items-center px-2 py-1 rounded-md ${
+        isSelected ? "bg-primary text-primary-foreground" : ""
+      }`}
+    >
+      {item.label}
+    </CommandItem>
+  )
+})}
+
             </div>
           </CommandGroup>
         </CommandList>

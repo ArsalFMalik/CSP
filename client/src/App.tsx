@@ -1,9 +1,11 @@
 import { MultiSelect } from "@/components/ui/MultiSelect"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModeToggle } from "@/components/mode-toggle"
-import { getIngredients } from "./api/queries"
+import { getIngredients, getRecipes, Recipe } from "./api/queries"
 import { useEffect, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
+import { Button } from "@/components/ui/button"
+import { RecipeList } from "./components/recipe-list"
 
 type Items = {
   label: string;
@@ -12,6 +14,7 @@ type Items = {
 
 function App() {
   const [ ingredients, setIngredients ] = useState<Items[]>([]);
+  const [ recipes, setRecipes ] = useState<Recipe[]>([]);
   const [ selectedIngredients, setSelectedIngredients ] = useState<string[]>([]);
 
 
@@ -24,6 +27,35 @@ function App() {
     }
   )
   }
+
+   function sortRecipesByMatchCount(recipes: Recipe[], selectedIngredients: string[]): Recipe[] {
+    const selectedSet = new Set(selectedIngredients);
+  
+    return recipes
+      .map((recipe) => {
+        const matchCount = recipe.ingredients.filter((id) => selectedSet.has(id)).length;
+        return { recipe, matchCount };
+      })
+      .sort((a, b) => b.matchCount - a.matchCount)
+      .map(({ recipe }) => recipe);
+  }
+
+  const fetchRecipes = async () => {
+    try {
+      console.log("Selected Ingredients:", selectedIngredients);
+      const response = await getRecipes(selectedIngredients);
+      const sortedRecipes = sortRecipesByMatchCount(response, selectedIngredients);
+      setRecipes(sortedRecipes);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+    }
+
+    
+
+    console.log(recipes)
+  };
+
+
 
 //   const items = [
 //   { value: "react", label: "React" },
@@ -61,7 +93,6 @@ useEffect(() => {
     const mapped = mapIngredients(data);
     setIngredients(mapped);
   }
-  console.log(ingredients)
 }, [data]);
 
 
@@ -70,9 +101,13 @@ useEffect(() => {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4">
         <ModeToggle />
-        <MultiSelect items={ingredients}  />
+        <MultiSelect items={ingredients} selected={selectedIngredients} setSelected={setSelectedIngredients}/>     
+        <Button className="cursor-pointer" onClick={() => fetchRecipes()}>Search</Button>  
+        {recipes.length > 0 && (
+          <RecipeList recipes={recipes} ingredientsLookup={ingredients} />
+        )}
       </div>
     </ThemeProvider>
   )

@@ -28,9 +28,9 @@ app.get("/ingredients", async (req, res) => {
     }
 })
 
-app.get("/recipes", async (req, res) => {
+app.post("/recipes", async (req, res) => {
 
-    const ingredients = req.body;
+    const ingredients = req.body.ingredients;
 
     try{
        const result = await getRecipes(ingredients);
