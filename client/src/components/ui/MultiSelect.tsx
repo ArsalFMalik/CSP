@@ -1,4 +1,3 @@
-// import { useState } from "react"
 import {
   Command,
   CommandInput,
@@ -22,30 +21,7 @@ type Props = {
   setSelected: (ingredients: string[]) => void
 }
 
-// const items = [
-//   { value: "react", label: "React" },
-//   { value: "vue", label: "Vue" },
-//   { value: "svelte", label: "Svelte" },
-//   { value: "angular", label: "Angular" },
-//   { value: "nextjs", label: "Next.js" },
-//   { value: "nuxt", label: "Nuxt" },
-//   { value: "solid", label: "SolidJS" },
-//   { value: "ember", label: "Ember.js" },
-//   // Add more as needed
-// ]
-
 export function MultiSelect( { items, selected, setSelected } : Props) {
-  // const [selected, setSelected] = useState<string[]>([])
-
-  // const toggleItem = (value: string) => {
-  //   setSelected((prev) =>
-  //     prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-  //   )
-  // }
-
-  // const removeItem = (value: string) => {
-  //   setSelected((prev) => prev.filter((v) => v !== value))
-  // }
 
   const toggleItem = (value: string) => {
     const newSelected = selected.includes(value)
@@ -62,7 +38,6 @@ export function MultiSelect( { items, selected, setSelected } : Props) {
 
   return (
     <div className="w-full max-w-xl space-y-4">
-      {/* Selected Badges */}
       <div className="flex flex-wrap gap-2">
             {selected.length === 0 ? (
                 <span className="text-muted-foreground">No ingredients selected</span>
@@ -97,7 +72,6 @@ export function MultiSelect( { items, selected, setSelected } : Props) {
   </Button>
   )}
 
-      {/* Searchable Command Grid */}
       <Command className="border rounded-md">
         <CommandInput placeholder="Search ingredients..." />
         <CommandList>

@@ -55,34 +55,6 @@ function App() {
     console.log(recipes)
   };
 
-
-
-//   const items = [
-//   { value: "react", label: "React" },
-//   { value: "vue", label: "Vue" },
-//   { value: "svelte", label: "Svelte" },
-//   { value: "angular", label: "Angular" },
-//   { value: "nextjs", label: "Next.js" },
-//   { value: "nuxt", label: "Nuxt" },
-//   { value: "solid", label: "SolidJS" },
-//   { value: "ember", label: "Ember.js" },
-//   // Add more as needed
-// ]
-
-// useEffect(() => {
-//   const fetchIngredients = async () => {
-//     try {
-//       const response = await getIngredients();
-//       const data = mapIngredients(response);
-//       setIngredients(data);
-//     } catch (error) {
-//       console.error("Error fetching ingredients:", error);
-//     }
-//   };
-//   fetchIngredients();
-//   console.log(ingredients)
-// })
-
 const { data, isLoading, isError, error } = useQuery({
   queryKey: ["ingredients"],
   queryFn: getIngredients,
@@ -102,6 +74,7 @@ useEffect(() => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="min-h-screen flex flex-col gap-4 items-center justify-center p-4">
+      <h1 className="text-3xl font-bold text-center">Smart Recipe Finder</h1>
         <ModeToggle />
         <MultiSelect items={ingredients} selected={selectedIngredients} setSelected={setSelectedIngredients}/>     
         <Button className="cursor-pointer" onClick={() => fetchRecipes()}>Search</Button>  
